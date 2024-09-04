@@ -12,9 +12,7 @@
         <div class="d-flex align-items-center">
             <h3 class="mr-auto p-3">Kelurahan List</h3>
             <div class="ms-auto" role="group">
-                <button class="btn btn-danger">
-                    Add Kelurahan
-                </button>
+                <button class="btn btn-danger" id="btn-add" th:href="@{~/kelurahan/add}">Add Kelurahan</button>
             </div>
         </div>
     </div>
@@ -23,23 +21,46 @@
             <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">First Name</th>
-                <th scope="col">Last Name</th>
-                <th scope="col">Email</th>
+                <th scope="col">Nama</th>
+                <th scope="col">Alamat</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th scope="row">1</th>
-                <td>John</td>
-                <td>Doe</td>
-                <td>jhon@email.com</td>
+            <tr th:each="data, no :${kelurahan}">
+                <th scope="row" th:text="${no.index + 1}">1</th>
+                <td th:text="${data.nama}"></td>
+                <td th:text="${data.alamat}"></td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
 <!-- Table End -->
+<th:block th:fragment="script">
+    <script>
+        $(document).ready(function (){
+            $(function () {
+                // btn add click
+                $("#btn-add").click(function () {
+                    var url = $(this).attr('href');
+                    showModal(url, ' ');
+                });
+            });
 
+            function showModal(url){
+                $.ajax({
+                    url: url,
+                    method: 'GET',
+                    dataType: 'html',
+                    success: function (result){
+                        $('#main-modal').find('.modal-content').html(result);
+
+                        $('#main-modal').modal('show');
+                    }
+                });
+            }
+        });
+    </script>
+</th:block>
 </body>
 </html>

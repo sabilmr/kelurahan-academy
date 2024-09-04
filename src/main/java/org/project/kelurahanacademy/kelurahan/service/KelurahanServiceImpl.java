@@ -5,7 +5,6 @@ import org.project.kelurahanacademy.kelurahan.model.entity.DusunEntity;
 import org.project.kelurahanacademy.kelurahan.model.entity.KelurahanEntity;
 import org.project.kelurahanacademy.kelurahan.model.request.DusunReq;
 import org.project.kelurahanacademy.kelurahan.model.request.KelurahanReq;
-import org.project.kelurahanacademy.kelurahan.model.response.DusunRes;
 import org.project.kelurahanacademy.kelurahan.model.response.KelurahanRes;
 import org.project.kelurahanacademy.kelurahan.repository.KelurahanRepo;
 import org.springframework.beans.BeanUtils;
@@ -14,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,13 +51,16 @@ public class KelurahanServiceImpl implements KelurahanService{
     public Optional<KelurahanRes> save(KelurahanReq request) {
         KelurahanEntity entity = new KelurahanEntity();
         BeanUtils.copyProperties(request, entity);
+        entity.setId(UUID.randomUUID().toString());
 
-        if (!request.getDusun().isEmpty()){
-            for (DusunReq dusun : request.getDusun()){
-                DusunEntity dusunEntity = new DusunEntity();
+        if(!request.getDusun().isEmpty()) {
+            for (DusunReq dusunReq : request.getDusun()) {
+                DusunEntity entityDusun = new DusunEntity();
 
-                BeanUtils.copyProperties(dusun, dusunEntity);
-                entity.addDusun(dusunEntity);
+                BeanUtils.copyProperties(dusunReq, entityDusun);
+                entityDusun.setId(UUID.randomUUID().toString());
+
+                entity.addDusun(entityDusun);
             }
         }
         try {
@@ -73,11 +76,44 @@ public class KelurahanServiceImpl implements KelurahanService{
 
     @Override
     public Optional<KelurahanRes> update(KelurahanReq request, String id) {
-        return Optional.empty();
+        KelurahanEntity entity = repo.findById(id).orElse(null);
+        if (entity == null){
+            return Optional.empty();
+        }
+        BeanUtils.copyProperties(request, entity);
+        entity.setId(id);
+
+        try {
+            repo.save(entity);
+            log.info("Update Kelurahan Success");
+            return Optional.of(new KelurahanRes(entity));
+        } catch (Exception e) {
+            log.error("Update Kelurahan failed, error: {}", e.getMessage());
+            return Optional.empty();
+        }
     }
 
     @Override
     public Optional<KelurahanRes> delete(String id) {
-        return Optional.empty();
+        KelurahanEntity entity = repo.findById(id).orElse(null);
+        if (entity == null){
+            return Optional.empty();
+        }
+        try {
+            repo.delete(entity);
+            log.info("Delete Kelurahan Success");
+            return Optional.of(new KelurahanRes(entity));
+        } catch (Exception e) {
+            log.error("Delete Kelurahan failed, error: {}", e.getMessage());
+            return Optional.empty();
+        }
+    }
+
+    private KelurahanEntity getByEntityId(DusunEntity dusunEntity) {
+        KelurahanEntity result = this.repo.findById(dusunEntity.getKelurahanId()).orElse(null);
+        if (result == null){
+            return null;
+        }
+        return result;
     }
 }

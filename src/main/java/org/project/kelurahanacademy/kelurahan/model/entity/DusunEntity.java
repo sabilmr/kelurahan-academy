@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.project.kelurahanacademy.kelurahan.model.response.DusunRes;
-import org.springframework.beans.BeanUtils;
+import lombok.ToString;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -29,15 +30,18 @@ public class DusunEntity {
     private String kelurahanId;
     //@ManyToOne: Annotation ini menunjukkan bahwa ada hubungan banyak-ke-satu (many-to-one) antara entitas ini
     //(entitas yang mendefinisikan kode ini) dengan entitas KelurahanEntity.
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.EAGER)
     //@JoinColumn: Annotation ini digunakan untuk menentukan kolom yang akan digunakan sebagai join key dalam hubungan antar entitas
     @JoinColumn(name = "kelurahan_id")
     private KelurahanEntity kelurahan;
 
-    public DusunEntity(DusunRes response) {
-        BeanUtils.copyProperties(response, this);
+    @OneToMany(mappedBy = "dusun", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<RwEntity> rwEntities = new ArrayList<>();
+
+    public DusunEntity(String id, String name, KelurahanEntity kelurahan) {
         this.id = UUID.randomUUID().toString();
+        this.name = name;
+        this.kelurahan = kelurahan;
     }
-
-
 }

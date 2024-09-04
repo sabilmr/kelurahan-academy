@@ -1,18 +1,20 @@
-package org.project.kelurahanacademy.kelurahan.model.response;
+package org.project.kelurahanacademy.kelurahan.model.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.project.kelurahanacademy.kelurahan.model.entity.RwEntity;
 import org.springframework.beans.BeanUtils;
 
 @Data
 @AllArgsConstructor
-public class RWRes {
+@NoArgsConstructor
+public class RWReq {
     private String id;
     private String name;
     private String nameRW;
 
-    public RWRes(RwEntity rwEntity) {
-        BeanUtils.copyProperties(rwEntity, this);
+    public RWReq(RwEntity entity) {
+        BeanUtils.copyProperties(entity, this);
     }
 }

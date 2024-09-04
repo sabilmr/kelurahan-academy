@@ -4,8 +4,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.project.kelurahanacademy.kelurahan.model.response.KelurahanRes;
-import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +34,15 @@ public class KelurahanEntity {
     @OneToMany(mappedBy = "kelurahan", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DusunEntity> daftarDusun = new ArrayList<>();
 
+
+    public KelurahanEntity(String id, String nama, String alamat) {
+        this.id = UUID.randomUUID().toString();
+        this.nama = nama;
+        this.alamat = alamat;
+    }
+
     public void addDusun(DusunEntity dusun) {
         this.daftarDusun.add(dusun);
         dusun.setKelurahan(this);
-    }
-
-    public KelurahanEntity(KelurahanRes response) {
-        BeanUtils.copyProperties(response, this);
-        this.id = UUID.randomUUID().toString();
     }
 }

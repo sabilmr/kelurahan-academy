@@ -8,7 +8,7 @@ import org.springframework.beans.BeanUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -16,8 +16,15 @@ import java.util.UUID;
 public class DusunReq {
     private String id;
     private String name;
+    private List<RWReq> rwList = new ArrayList<>();
 
     public DusunReq(DusunEntity entity) {
         BeanUtils.copyProperties(entity, this);
+
+        if (!entity.getRwEntities().isEmpty()) {
+            this.rwList = entity.getRwEntities().stream()
+                    .map(RWReq::new)
+                    .collect(Collectors.toList());
+        }
     }
 }
