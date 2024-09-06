@@ -16,13 +16,14 @@ import java.util.stream.Collectors;
 public class DusunReq {
     private String id;
     private String name;
-    private List<RWReq> rwList = new ArrayList<>();
+    private String kelurahanId;
+    private List<RWReq> rw = new ArrayList<>();
 
     public DusunReq(DusunEntity entity) {
         BeanUtils.copyProperties(entity, this);
 
         if (!entity.getRwEntities().isEmpty()) {
-            this.rwList = entity.getRwEntities().stream()
+            this.rw = entity.getRwEntities().stream()
                     .map(RWReq::new)
                     .collect(Collectors.toList());
         }

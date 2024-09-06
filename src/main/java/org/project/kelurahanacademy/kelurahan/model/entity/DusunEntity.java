@@ -39,9 +39,13 @@ public class DusunEntity {
     @OneToMany(mappedBy = "dusun", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<RwEntity> rwEntities = new ArrayList<>();
 
-    public DusunEntity(String id, String name, KelurahanEntity kelurahan) {
+    public DusunEntity(String id, String name) {
         this.id = UUID.randomUUID().toString();
         this.name = name;
-        this.kelurahan = kelurahan;
+    }
+
+    public void addRW(RwEntity rwEntity) {
+        rwEntities.add(rwEntity);
+        rwEntity.setDusun(this);
     }
 }

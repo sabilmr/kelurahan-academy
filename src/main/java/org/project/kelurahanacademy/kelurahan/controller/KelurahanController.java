@@ -4,13 +4,11 @@ import org.project.kelurahanacademy.kelurahan.model.request.KelurahanReq;
 import org.project.kelurahanacademy.kelurahan.model.response.KelurahanRes;
 import org.project.kelurahanacademy.kelurahan.service.KelurahanService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/kelurahan")
@@ -31,6 +29,19 @@ public class KelurahanController {
 
     }
 
+    @GetMapping("/detail/{id}")
+    public ModelAndView kelurahanDetail(@PathVariable("id") String id) {
+        ModelAndView view = new ModelAndView("pages/kelurahan/detail/detail");
+
+        Optional<KelurahanRes> result = kelurahanService.getById(id);
+        if (result.isPresent()) {
+            view.addObject("kelurahan", result.get());
+            return view;
+        }
+        return new ModelAndView("redirect:/kelurahan");
+    }
+
+
     @GetMapping("/add")
     public ModelAndView add(){
         ModelAndView view = new ModelAndView("pages/kelurahan/add");
@@ -46,4 +57,6 @@ public class KelurahanController {
         kelurahanService.save(request);
         return new ModelAndView("redirect:/kelurahan");
     }
+
+
 }

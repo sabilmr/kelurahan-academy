@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container-xxl flex-grow-1 container-p-y" layout:fragment="content">
+    <form>
+        <div class="row">
+            <div class="col-12">
+                <input type="hidden" name="id" th:value="${kelurahan.id}">
+                <div class="mb-3">
+                    <label for="firstName" class="form-label">Name kelurahan</label>
+                    <input type="text" class="form-control" id="firstName" th:value="${kelurahan.nama}">
+                </div>
+                <div class="mb-3">
+                    <label for="lastName" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="lastName" th:value="${kelurahan.alamat}">
+                </div>
+            </div>
+        </div>
+        <h3>Daftar Dusun</h3>
+        <div class="row">
+            <div class="col-12">
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Name Dusun</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="data, no : ${kelurahan.dusun}">
+                            <th scope="row" th:text="${no.index + 1}"></th>
+                            <td th:text="${data.name}">Mark</td>
+                            <td>
+                                <a th:href="@{~/kelurahan/detail/{kelurahanId}/dusun/{dusunId}(kelurahanId=${kelurahan.id}, dusunId=${data.id})}" class="btn btn-primary">
+                                    Detail
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+</html>

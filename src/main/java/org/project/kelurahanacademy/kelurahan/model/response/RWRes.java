@@ -5,6 +5,8 @@ import lombok.Data;
 import org.project.kelurahanacademy.kelurahan.model.entity.RwEntity;
 import org.springframework.beans.BeanUtils;
 
+import java.util.Optional;
+
 @Data
 @AllArgsConstructor
 public class RWRes {
@@ -15,4 +17,5 @@ public class RWRes {
     public RWRes(RwEntity rwEntity) {
         BeanUtils.copyProperties(rwEntity, this);
     }
+
 }
