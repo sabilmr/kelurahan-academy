@@ -54,7 +54,6 @@ public class DusunServiceImpl implements DusunService {
     public Optional<DusunRes> save(DusunReq request) {
         DusunEntity entity = this.convertReqToEntity(request);
 
-        BeanUtils.copyProperties(request, entity);
         entity.setId(UUID.randomUUID().toString());
 
         if (!request.getRw().isEmpty()) {
@@ -70,7 +69,7 @@ public class DusunServiceImpl implements DusunService {
         try {
             dusunRepo.save(entity);
             log.info("Save Dusun Successfully");
-            return Optional.of(new DusunRes(entity));
+            return Optional.of(convertResToEntity(entity));
         } catch (Exception e) {
             log.error("Save Dusun Failed, error : {}", e.getMessage());
             return Optional.empty();
@@ -130,6 +129,7 @@ public class DusunServiceImpl implements DusunService {
 
         DusunEntity result = new DusunEntity();
         BeanUtils.copyProperties(request, result);
+        result.setKelurahan(entity);
         return result;
     }
 }

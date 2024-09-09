@@ -22,6 +22,8 @@ public class DusunRes {
 
     public DusunRes(DusunEntity entity){
         BeanUtils.copyProperties(entity, this);
+        this.kelurahanId = entity.getKelurahanId();
+        this.kelurahanName = entity.getKelurahan().getNama();
 
         if (!entity.getRwEntities().isEmpty()) {
             this.rw = entity.getRwEntities().stream()

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layouts/main}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="container-xxl flex-grow-1 container-p-y" layout:fragment="content">
+    <div class="row">
+        <div class="card-header">
+            <h3 class="card-title">New Dusun</h3>
+        </div>
+        <form th:action="@{~/dusun/save}" method="post">
+            <div class="col-12">
+                <div class="mb-3">
+                    <label for="kelurahanId" class="form-label">Kelurahan</label>
+                    <select class="form-select" id="kelurahanId" name="kelurahanId" th:value="${dusun.kelurahanId}">
+                        <option value="">Pilih Kelurahan</option>
+                        <option th:each="item :${kelurahan}" th:value="${item.id}" th:text="${item.nama}"></option>
+                    </select>
+                </div>
+                <div id="dusun-container">
+                    <div class="row form-dusun">
+                        <div class="d-flex justify-content-between">
+                            <button type="button" id="btn-add" class="btn btn-primary ms-auto">Add Dusun</button>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name Dusun</label>
+                            <input type="text" class="form-control" id="name" name="name" th:value="${dusun.name}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <a class="btn btn-secondary" th:href="@{~/dusun}">Close</a>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#dusun-container").on('click', function () {
+            var dusunIndex = $('#dusun-container .form-dusun').length;
+
+            var dusunElement = ' <div class="row form-dusun">\n' +
+                '                   <div class="mb-3">\n' +
+                '                      <label for="dusun_'+ dusunIndex +'_name" class="form-label">Name Dusun</label>\n' +
+                '                      <input type="text" class="form-control" id="dusun_'+ dusunIndex +'_name" name="dusun['+ dusunIndex +'].name">\n' +
+                '                   </div>\n' +
+                '                </div>`;\n'
+
+            $('#dusun-container').append(dusunElement);
+        });
+    });
+</script>
+</body>
+</html>
